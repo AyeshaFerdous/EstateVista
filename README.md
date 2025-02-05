@@ -40,7 +40,7 @@ First, clone the project repository to your local machine:
 
 ```bash
 git clone https://github.com/ayeshaferdous/estatevista.git
-cd roomify
+cd estatevista
 ```
 
 ### 2. Install dependencies
