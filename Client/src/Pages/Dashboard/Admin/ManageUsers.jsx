@@ -2,17 +2,18 @@ import { useQuery, useMutation, useQueryClient  } from '@tanstack/react-query';
 import axios from 'axios';
 import { useState } from 'react';
 import LoadingSpinner from '../../../Components/LoadingSpinner';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const ManageUsers = () => {
     const queryClient = useQueryClient();
   const [selectedUser, setSelectedUser] = useState(null);
   const [actionType, setActionType] = useState("");
-
+  const axiosSecure = useAxiosSecure()
   
   const { data: users = [], isPending } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const {data} = await axios.get(`${import.meta.env.VITE_URL}/users`); 
+      const {data} = await axiosSecure.get(`${import.meta.env.VITE_URL}/users`);
       return data;
     },
   });

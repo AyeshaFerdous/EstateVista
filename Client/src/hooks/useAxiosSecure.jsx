@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../AuthProvider/AuthProvider";
 
 
@@ -13,7 +13,7 @@ const useAxiosSecure = () => {
 //   const navigate = useNavigate();
   axiosSecure.interceptors.request.use(
     (config) => {
-      config.headers.authorization = Bearer `${localStorage.getItem("token")}`;
+      config.headers.authorization = `Bearer ${localStorage.getItem("token")}`;
       return config;
     },
     (error) => {
