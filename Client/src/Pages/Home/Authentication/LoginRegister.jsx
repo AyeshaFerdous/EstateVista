@@ -1,7 +1,7 @@
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useContext, useState } from "react";
+import { FaGoogle } from "react-icons/fa";
 
-import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 
 import toast from "react-hot-toast";
@@ -164,7 +164,7 @@ const LoginRegister = () => {
                     onClick={handleGoogle}
                     className="btn w-full font-semibold px-12 md:px-24"
                   >
-                    <FcGoogle className="text-2xl" />
+                    <FaGoogle  className="text-2xl" />
                     <span>Sign in with Google</span>
                   </button>
                 </div>

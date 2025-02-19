@@ -5,6 +5,7 @@ import AdvertisementSection from './AdvertisementSection';
 import LatestReviews from './LatestReviews';
 import Featured from './Shared/Featured';
 import Premium from './Premium';
+import Newsletter from './Newsletter';
 
 const Home = () => {
     return (
@@ -15,6 +16,7 @@ const Home = () => {
            <Featured/>
            <Premium/>
             <GridLayout/>
+            <Newsletter/>
         </div>
     );
 };
