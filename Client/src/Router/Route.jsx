@@ -57,7 +57,7 @@ import AboutUs from "../Pages/Home/AboutUs";
         },
         {
           path : '/aboutUs',
-          element : <AboutUs/>
+        element : <AboutUs/>
           },
         {
             path : '/login',
