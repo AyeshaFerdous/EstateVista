@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const jwt = require('jsonwebtoken');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
@@ -10,6 +11,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // middleware
+
 const corsOptions = {
   origin: [
     'http://localhost:5173',
@@ -22,24 +24,26 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// // verify user token
-// const verifyToken = (req, res, next) => {
-//   if (!req.headers.authorization) {
-//     return res.status(401).send({ message: "unauthorized access" });
-//   }
-//   const token = req.headers.authorization.split(" ")[1];
+// verify user token
 
-//   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-//     if (err) {
-//       return res.status(401).send({ message: "forbidden access" });
-//     }
-//     req.decoded = decoded;
+const verifyToken = (req, res, next) => {
+  if (!req.headers.authorization) {
+    return res.status(401).send({ message: "unauthorized access" });
+  }
+  const token = req.headers.authorization.split(" ")[1];
 
-//     next();
-//   });
-// };
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({ message: "forbidden access" });
+    }
+    req.decoded = decoded;
+
+    next();
+  });
+};
 
 //    // verify a user admin or not
+
 //    const verifyAdmin = async (req, res, next) => {
 //     const email = req.decoded.email;
 
@@ -52,7 +56,9 @@ app.use(express.json());
 //     }
 //     next();
 //   };
+
 //   // verify a user agent or not
+  
 //   const verifyAgent = async (req, res, next) => {
 //     const email = req.decoded.email;
 
@@ -112,7 +118,7 @@ async function run() {
       res.send(result);
     })
 
-    app.get('/users', async(req,res)=>{
+    app.get('/users',verifyToken, async(req,res)=>{
       const result  = await usersCollection.find().toArray();
       res.send(result)
     })
