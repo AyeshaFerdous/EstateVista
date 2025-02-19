@@ -83,6 +83,40 @@ const Navbar = () => {
           Dashboard
         </NavLink>
       </li>
+
+      <li>
+        <NavLink
+          to="/contact"
+          className={({ isActive }) => {
+            return isActive
+              ? isScrolled
+                ? "text-primary font-bold"
+                : "text-secondary font-bold"
+              : isScrolled
+              ? "text-secondary font-bold"
+              : "text-primary hover:text-secondary font-bold";
+          }}
+        >
+          Contact
+        </NavLink>
+      </li>
+
+      <li>
+        <NavLink
+          to="/aboutUs"
+          className={({ isActive }) => {
+            return isActive
+              ? isScrolled
+                ? "text-primary font-bold"
+                : "text-secondary font-bold"
+              : isScrolled
+              ? "text-secondary font-bold"
+              : "text-primary hover:text-secondary font-bold";
+          }}
+        >
+          About Us
+        </NavLink>
+      </li>
      {!user && <>
       <li>
         <NavLink

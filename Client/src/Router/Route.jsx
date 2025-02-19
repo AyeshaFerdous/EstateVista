@@ -28,6 +28,8 @@ import PrivateRoute from "./PrivateRoute";
 import AgentRoute from "./AgentRoute";
 import AdminRoute from "./AdminRoute";
 import ErrorPage from "../Pages/Errorpage";
+import Contact from "../Pages/Contact";
+import AboutUs from "../Pages/Home/AboutUs";
 
 
 
@@ -49,6 +51,14 @@ import ErrorPage from "../Pages/Errorpage";
           path : '/property/:id',
           element : <PrivateRoute><ViewDetails></ViewDetails></PrivateRoute>
         },
+        {
+        path : '/contact',
+        element : <Contact/>
+        },
+        {
+          path : '/aboutUs',
+          element : <AboutUs/>
+          },
         {
             path : '/login',
             element : <LoginRegister/>
