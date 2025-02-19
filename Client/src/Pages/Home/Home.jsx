@@ -6,6 +6,7 @@ import LatestReviews from './LatestReviews';
 import Featured from './Shared/Featured';
 import Premium from './Premium';
 import Newsletter from './Newsletter';
+import FAQ from './FAQ';
 
 const Home = () => {
     return (
@@ -17,6 +18,7 @@ const Home = () => {
            <Premium/>
             <GridLayout/>
             <Newsletter/>
+            <FAQ/>
         </div>
     );
 };

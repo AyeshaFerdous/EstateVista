@@ -18,7 +18,7 @@ const LatestReviews = () => {
   }
 
   return (
-    <section className="container mx-auto p-6">
+    <section className="container mx-auto p-6 my-10">
       <h2 className="text-4xl font-bold text-center my-8">Latest User Reviews</h2>
 
       <Marquee pauseOnHover speed={50}>

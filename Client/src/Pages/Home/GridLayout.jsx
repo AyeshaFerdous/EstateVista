@@ -10,7 +10,7 @@ import gallery8 from '../../assets/gallery8.jpg'
 import gallery9 from '../../assets/gallery9.jpg'
 const GridLayout = () => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4 max-w-7xl mx-auto">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4 max-w-7xl mx-auto my-10">
       {/* Apartment - col-span-2 */}
       <div className="col-span-2 relative group overflow-hidden rounded-lg shadow-lg">
         <img

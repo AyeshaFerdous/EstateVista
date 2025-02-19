@@ -12,7 +12,7 @@ const Featured = () => {
         backgroundPosition: "center",
         clipPath: "polygon(0 10%, 100% 0, 100% 90%, 0 100%)",
       }}
-      className="relative bg-fixed py-24  overflow-hidden"
+      className="relative bg-fixed py-24  overflow-hidden my-10"
     >
       <div className="w-11/12 mx-auto">
         {/* Blue Overlay */}

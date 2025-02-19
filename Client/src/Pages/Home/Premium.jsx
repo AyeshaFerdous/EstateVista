@@ -34,7 +34,7 @@ const Premium = () => {
         triggerOnce: true});
     
   return (
-    <section className="bg-gray-50 py-16">
+    <section className="bg-gray-50 py-16 my-10">
       <div className="container mx-auto px-6">
         {/* Section Heading */}
         <div className="text-center mb-12">
