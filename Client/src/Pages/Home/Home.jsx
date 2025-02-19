@@ -4,6 +4,7 @@ import GridLayout from './GridLayout';
 import AdvertisementSection from './AdvertisementSection';
 import LatestReviews from './LatestReviews';
 import Featured from './Shared/Featured';
+import Premium from './Premium';
 
 const Home = () => {
     return (
@@ -12,6 +13,7 @@ const Home = () => {
            <AdvertisementSection/>
            <LatestReviews/>
            <Featured/>
+           <Premium/>
             <GridLayout/>
         </div>
     );
