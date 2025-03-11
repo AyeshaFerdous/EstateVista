@@ -3,8 +3,10 @@ import axios from 'axios';
 import React from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const Advertise = () => {
+  const axiosSecure = useAxiosSecure()
 
     const navigate  = useNavigate()
   const {
@@ -24,7 +26,7 @@ const Advertise = () => {
    // Mutation to mark property as advertised
    const advertiseMutation = useMutation({
     mutationFn: async (propertyId) => {
-      await axios.put(`${import.meta.env.VITE_URL}/advertise-property/${propertyId}`);
+      await axiosSecure.put(`${import.meta.env.VITE_URL}/advertise-property/${propertyId}`);
     },
     onSuccess: () => {
       toast.success("Property Advertised Successfully!");

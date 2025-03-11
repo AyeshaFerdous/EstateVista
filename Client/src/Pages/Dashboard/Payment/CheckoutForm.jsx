@@ -5,8 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const CheckoutForm = ({ id }) => {
+  const axiosSecure = useAxiosSecure()
+
   const [error, setError] = useState("");
 
   const { user } = useContext(AuthContext);
@@ -24,14 +27,14 @@ const CheckoutForm = ({ id }) => {
   } = useQuery({
     queryKey: ["userOffers", id],
     queryFn: async () => {
-      const { data } = await axios(`${import.meta.env.VITE_URL}/offer/${id}`);
+      const { data } = await axiosSecure(`${import.meta.env.VITE_URL}/offer/${id}`);
       return data;
     },
   });
 
   useEffect(() => {
     if (offer?.offerAmount > 0) {
-      axios
+      axiosSecure
         .post(`${import.meta.env.VITE_URL}/create-payment-intent`, {
           price: parseInt(offer?.offerAmount),
         })
@@ -93,7 +96,7 @@ const CheckoutForm = ({ id }) => {
           status: "pending",
         };
 
-        const res = await axios.post(`${import.meta.env.VITE_URL}/payments`, payment);
+        const res = await axiosSecure.post(`${import.meta.env.VITE_URL}/payments`, payment);
         console.log("payment saved", res.data);
         refetch();
         if (res.data?.paymentResult?.insertedId) {

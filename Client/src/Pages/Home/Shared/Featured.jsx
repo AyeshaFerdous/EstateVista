@@ -1,7 +1,7 @@
 import React from "react";
 import { FaHandHoldingDollar } from "react-icons/fa6";
 import { FaHome, FaDollarSign, FaQuestionCircle } from "react-icons/fa";
-import featured from "../../../assets/slide3.jpg";
+import featured from "../../../assets/slide.jpg";
 
 const Featured = () => {
   return (

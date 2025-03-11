@@ -10,8 +10,10 @@ import { BiSolidOffer } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../../Components/LoadingSpinner";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Wishlist= () => {
+  const axiosSecure = useAxiosSecure();
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState("table");
@@ -23,7 +25,7 @@ const Wishlist= () => {
   const { data: wishlist, isLoading, isError } = useQuery({
     queryKey: ["wishlist", user?.email],
     queryFn: async () => {
-      const { data } = await axios.get(`${import.meta.env.VITE_URL}/wishlist/${user?.email}`);
+      const { data } = await axiosSecure.get(`${import.meta.env.VITE_URL}/wishlist/${user?.email}`);
       return data;
     },
     enabled: !!user, 
@@ -32,7 +34,7 @@ const Wishlist= () => {
   // Mutation to remove property from wishlist
   const { mutate: removeFromWishlist, isLoading: isRemoving } = useMutation({
     mutationFn: async (propertyId) => {
-      return await axios.delete(`${import.meta.env.VITE_URL}/wishlist/${user?.email}/${propertyId}`);
+      return await axiosSecure.delete(`${import.meta.env.VITE_URL}/wishlist/${user?.email}/${propertyId}`);
     },
     onSuccess: () => {
       toast.success("Property removed from wishlist!");

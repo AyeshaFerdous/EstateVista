@@ -254,7 +254,7 @@ const LoginRegister = () => {
                     onClick={handleGoogle}
                     className="btn w-full font-semibold px-12 md:px-24"
                   >
-                    <FcGoogle className="text-2xl" />
+                    <FaGoogle className="text-2xl" />
                     <span>Sign in with Google</span>
                   </button>
                 </div>

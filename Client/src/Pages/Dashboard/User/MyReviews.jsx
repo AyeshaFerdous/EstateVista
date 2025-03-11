@@ -3,15 +3,17 @@ import axios from "axios";
 import React, { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const MyReviews = () => {
+  const axiosSecure = useAxiosSecure()
   const { user } = useContext(AuthContext);
   const [deletingReviewId, setDeletingReviewId] = useState(null);
   
   const { data: reviews, isLoading, isError, refetch } = useQuery({
     queryKey: ["reviews", user?.email],
     queryFn: async () => {
-      const { data } = await axios(
+      const { data } = await axiosSecure(
         `${import.meta.env.VITE_URL}/my-reviews?email=${user?.email}`
       );
       return data;
@@ -23,7 +25,7 @@ const MyReviews = () => {
   const { mutate: deleteReview } = useMutation({
     mutationFn: async (reviewId) => {
       setDeletingReviewId(reviewId);
-      await axios.delete(`${import.meta.env.VITE_URL}/reviews/${reviewId}`);
+      await axiosSecure.delete(`${import.meta.env.VITE_URL}/reviews/${reviewId}`);
     },
     onSuccess: () => {
       toast.success("Review deleted successfully!");

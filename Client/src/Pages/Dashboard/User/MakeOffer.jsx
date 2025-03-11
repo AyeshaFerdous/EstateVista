@@ -4,8 +4,10 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const MakeOffer = () => {
+    const axiosSecure = useAxiosSecure()
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const { id } = useParams();
@@ -17,7 +19,7 @@ const MakeOffer = () => {
   const { data : property , isLoading, refetch } = useQuery({
     queryKey: ["property", id],
     queryFn: async () => {
-      const { data } = await axios(`${import.meta.env.VITE_URL}/property/${id}`);
+      const { data } = await axiosSecure(`${import.meta.env.VITE_URL}/property/${id}`);
       return data;
     },
   });
@@ -52,7 +54,7 @@ const MakeOffer = () => {
       status :"pending"
     }
     try {
-      await axios.post(`${import.meta.env.VITE_URL}/make-offer`,offer)
+      await axiosSecure.post(`${import.meta.env.VITE_URL}/make-offer`,offer)
       .then(data => {
         if(data.data.insertedId){
           toast.success("Offer made successfully!");

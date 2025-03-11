@@ -4,8 +4,11 @@ import { imageUpload } from "../../../api/Utils";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const AddProperty = () => {
+  const axiosSecure = useAxiosSecure()
+
     const {user} = useContext(AuthContext)
     const [uploadImage, setUploadImage] = useState({
         image: { name: 'Upload' },
@@ -53,7 +56,7 @@ const AddProperty = () => {
       // save property in db
       try {
         // post req
-        await axios.post(`${import.meta.env.VITE_URL}/add-property`, propertyData)
+        await axiosSecure.post(`${import.meta.env.VITE_URL}/add-property`, propertyData)
         toast.success('Property Added Successfully!')
       } catch (err) {
         

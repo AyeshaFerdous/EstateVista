@@ -3,8 +3,11 @@ import { imageUpload } from "../../../api/Utils";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const UpdateProperties = () => {
+  const axiosSecure = useAxiosSecure()
+
   const property = useLoaderData();
   const navigate = useNavigate()
   const handleSubmit = async (e) => {
@@ -43,7 +46,7 @@ const UpdateProperties = () => {
       };
      
     try {
-      await axios.patch(`${import.meta.env.VITE_URL}/property/${property._id}`, updatedProperty);
+      await axiosSecure.patch(`${import.meta.env.VITE_URL}/property/${property._id}`, updatedProperty);
       toast.success("Property updated successfully!");
       navigate('/dashboard/my-added-properties')
     } catch (error) {

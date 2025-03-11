@@ -23,7 +23,7 @@ const ManageUsers = () => {
 
   const updateUserRole = useMutation({
     mutationFn: async ({ userId, role }) => {
-      const {data}= await  axios.patch(`${import.meta.env.VITE_URL}/users/${userId}`, { role });
+      const {data}= await  axiosSecure.patch(`${import.meta.env.VITE_URL}/users/${userId}`, { role });
       return data;
     },
     onSuccess: () => queryClient.invalidateQueries(["users"]),
@@ -33,7 +33,7 @@ const ManageUsers = () => {
     
   const deleteUser = useMutation({
     mutationFn: async (userId) => {
-      const {data}=await axios.delete(`${import.meta.env.VITE_URL}/users/${userId}`);
+      const {data}=await axiosSecure.delete(`${import.meta.env.VITE_URL}/users/${userId}`);
       return data;
     },
     onSuccess: () => queryClient.invalidateQueries(["users"]),
@@ -43,7 +43,7 @@ const ManageUsers = () => {
 
   const markAsFraud = useMutation({
     mutationFn: async (userEmail) => {
-      const {data} = await axios.delete(`${import.meta.env.VITE_URL}/fraud-users/${userEmail}`);
+      const {data} = await axiosSecure.delete(`${import.meta.env.VITE_URL}/fraud-users/${userEmail}`);
       return data;
       
     },

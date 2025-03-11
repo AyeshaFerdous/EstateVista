@@ -2,9 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useContext } from "react";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const PaymentHistory = () => {
   const { user } = useContext(AuthContext);
+  const axiosSecure = useAxiosSecure()
 
   const {
     data: payments,
@@ -13,7 +15,7 @@ const PaymentHistory = () => {
   } = useQuery({
     queryKey: ["payment", user?.email],
     queryFn: async () => {
-      const { data } = await axios(
+      const { data } = await axiosSecure(
         `${import.meta.env.VITE_URL}/payments/${user?.email}`
       );
       return data;

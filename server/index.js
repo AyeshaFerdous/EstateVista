@@ -42,35 +42,11 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-//    // verify a user admin or not
+   // verify a user admin or not
 
-//    const verifyAdmin = async (req, res, next) => {
-//     const email = req.decoded.email;
-
-//     const query = { email };
-//     const user = await usersCollection.findOne(query);
-//     const isAdmin = user?.role == "admin";
-
-//     if (!isAdmin) {
-//       return res.status(403).send({ message: "forbidden access" });
-//     }
-//     next();
-//   };
-
-//   // verify a user agent or not
   
-//   const verifyAgent = async (req, res, next) => {
-//     const email = req.decoded.email;
 
-//     const query = { email };
-//     const user = await usersCollection.findOne(query);
-//     const isAgent = user?.role == "agent";
-
-//     if (!isAgent) {
-//       return res.status(403).send({ message: "forbidden access" });
-//     }
-//     next();
-//   };
+  
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.isdx8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -98,6 +74,34 @@ async function run() {
     const paymentCollection = db.collection("payment");
 
 
+
+    const verifyAdmin = async (req, res, next) => {
+      const email = req.decoded.email;
+  
+      const query = { email };
+      const user = await usersCollection.findOne(query);
+      const isAdmin = user?.role == "admin";
+  
+      if (!isAdmin) {
+        return res.status(403).send({ message: "forbidden access" });
+      }
+      next();
+    };
+
+    // verify a user agent or not
+  
+  const verifyAgent = async (req, res, next) => {
+    const email = req.decoded.email;
+
+    const query = { email };
+    const user = await usersCollection.findOne(query);
+    const isAgent = user?.role == "agent";
+
+    if (!isAgent) {
+      return res.status(403).send({ message: "forbidden access" });
+    }
+    next();
+  };
     // JWT API
 
     app.post('/jwt', (req,res)=>{
@@ -111,14 +115,14 @@ async function run() {
 
   //  profile api
 
-    app.get("/user/:email", async(req,res)=>{
+    app.get("/user/:email",verifyToken, async(req,res)=>{
       const email = req.params.email;
       const query = {email}
       const result = await usersCollection.findOne(query)
       res.send(result);
     })
 
-    app.get('/users',verifyToken, async(req,res)=>{
+    app.get('/users',verifyToken,verifyAdmin, async(req,res)=>{
       const result  = await usersCollection.find().toArray();
       res.send(result)
     })
@@ -142,7 +146,7 @@ async function run() {
     });
 
 
-    app.patch('/users/:userId', async(req,res)=>{
+    app.patch('/users/:userId',verifyToken,verifyAdmin, async(req,res)=>{
       const id = req.params.userId;
       
       const {role} = req.body;
@@ -150,15 +154,15 @@ async function run() {
       const updateRole = {$set: {role}}
       const result = await usersCollection.updateOne(filter,updateRole)
       res.send(result)
-    })
+    });
 
-    app.delete('/users/:userId', async(req, res)=>{
+    app.delete('/users/:userId',verifyToken,verifyAdmin, async(req, res)=>{
       const id = req.params.userId;
       const result = await usersCollection.deleteOne({ _id: new ObjectId(id) });
       res.send(result);
-    })
+    });
 
-    app.delete('/fraud-users/:userEmail', async(req,res)=>{
+    app.delete('/fraud-users/:userEmail',verifyToken,verifyAdmin, async(req,res)=>{
       const userEmail = req.params.userEmail;
       const query = {"agent.email" : userEmail}
 
@@ -170,7 +174,7 @@ async function run() {
       const updateRole = await usersCollection.updateOne(filter,updateDoc)
       res.send({deleteProperty,fraudEmail, updateRole})
       
-    })
+    });
 
     
     /* all properties api */
@@ -196,7 +200,6 @@ async function run() {
     } else if (sort === "dsc") {
       sortOption["priceRange.minRange"] = -1; 
     }
-   console.log(sortOption)
    
     const properties = await propertiesCollection
       .find(filter)
@@ -214,9 +217,9 @@ async function run() {
       .limit(4)          
       .toArray();
     res.send(result);
-    })
+    });
     // advertise property 
-    app.put("/advertise-property/:id", async (req, res) => {
+    app.put("/advertise-property/:id",verifyToken,verifyAdmin, async (req, res) => {
       try {
         const { id } = req.params;
         const filter = {_id : new ObjectId(id)}
@@ -230,7 +233,7 @@ async function run() {
       }
     });
 
-    app.get("/properties/:email", async (req, res) => {
+    app.get("/properties/:email",verifyToken,verifyAgent, async (req, res) => {
       const email = req.params.email;
       const query = { "agent.email" : email };
     
@@ -238,24 +241,24 @@ async function run() {
       res.send(result);
     });
 
-    app.delete("/property/:id", async (req, res) => {
+    app.delete("/property/:id", verifyToken,verifyAgent, async (req, res) => {
       const id = req.params.id;
       const result = await propertiesCollection.deleteOne({ _id: new ObjectId(id) });
       res.send(result);
     });
 
     
-    app.patch('/property/:id', async(req,res)=>{
+    app.patch('/property/:id',verifyToken,verifyAgent, async(req,res)=>{
       const id = req.params.id;
       const updatedProperty = req.body;
       const filter = {_id : new ObjectId(id)}
       const updateDoc = {$set : updatedProperty}
       const result = await propertiesCollection.updateOne(filter, updateDoc)
       res.send(result)
-    })
+    });
     
     /* Verify status api */
-    app.patch('/verify-property/:propertyId', async(req,res)=>{
+    app.patch('/verify-property/:propertyId',verifyToken,verifyAdmin, async(req,res)=>{
        const id = req.params.propertyId;
      
        const filter = {_id : new ObjectId(id)}
@@ -263,22 +266,22 @@ async function run() {
       const result = await propertiesCollection.updateOne(filter,updateVerify)
       res.send(result)
 
-    })
+    });
 
     /* reject status api */
 
-    app.patch('/reject-property/:propertyId', async(req,res)=>{
+    app.patch('/reject-property/:propertyId',verifyToken,verifyAdmin, async(req,res)=>{
       const id = req.params.propertyId;
 
       const filter = {_id : new ObjectId(id)}
       const updateReject = {$set : {status : "rejected"}}
       const result = await propertiesCollection.updateOne(filter,updateReject)
       res.send(result)
-    })
+    });
 
     // get the data for sold properties section from offerCollection
 
-    app.get("/sold-properties/:agentEmail", async (req, res) => {
+    app.get("/sold-properties/:agentEmail",verifyToken,verifyAgent, async (req, res) => {
       const agentEmail = req.params.agentEmail;
     
       const result = await offerCollection.find(
@@ -305,7 +308,7 @@ async function run() {
     
     
     /* add Property post api */
-    app.post("/add-property", async (req, res) => {
+    app.post("/add-property",verifyToken,verifyAgent, async (req, res) => {
       const property = req.body;
       const email = req.body.agent.email;
     
@@ -322,7 +325,7 @@ async function run() {
     });
     /* specific property api */
 
-    app.get("/property/:id", async (req, res) => {
+    app.get("/property/:id",verifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await propertiesCollection.findOne(query);
@@ -340,16 +343,16 @@ async function run() {
       .limit(4)          
       .toArray();
     res.send(result);
-    })
+    });
     // get all properties review
 
-    app.get('/reviews', async(req,res)=>{
+    app.get('/reviews',verifyToken, verifyAdmin, async(req,res)=>{
       const result = await reviewCollection.find().toArray()
       res.send(result)
-    })
+    });
 
     // Get all reviews for a specific property
-    app.get("/reviews/:propertyId", async (req, res) => {
+    app.get("/reviews/:propertyId",verifyToken, async (req, res) => {
       const propertyId = req.params.propertyId;
       const query = { propertyId: new ObjectId(propertyId) };
       const reviews = await reviewCollection.find(query).toArray();
@@ -357,7 +360,7 @@ async function run() {
     });
 
     // Add a review for a specific property
-    app.post("/reviews/:propertyId", async (req, res) => {
+    app.post("/reviews/:propertyId",verifyToken, async (req, res) => {
       const { rating, comment, name, email, image, propertyTitle } = req.body;
       const propertyId = req.params.propertyId;
 
@@ -385,7 +388,7 @@ async function run() {
     });
 
     // delete reviews
-    app.delete("/reviews/:reviewId", async (req, res) => {
+    app.delete("/reviews/:reviewId",verifyToken,verifyAdmin, async (req, res) => {
       const reviewId = req.params.reviewId;
       const query = { _id: new ObjectId(reviewId) };
       const result = await reviewCollection.deleteOne(query);
@@ -410,7 +413,7 @@ async function run() {
     });
     // wishlist related api
 
-    app.post("/wishlist", async (req, res) => {
+    app.post("/wishlist", verifyToken, async (req, res) => {
       const { name, email, propertyId } = req.body;
 
       if (!email || !propertyId) {
@@ -446,7 +449,7 @@ async function run() {
       }
     });
 
-    app.get("/wishlist/:email", async (req, res) => {
+    app.get("/wishlist/:email",verifyToken, async (req, res) => {
       const email = req.params.email;
       try {
         const wishlist = await wishlistCollection
@@ -471,7 +474,7 @@ async function run() {
       }
     });
 
-    app.delete("/wishlist/:email/:propertyId", async (req, res) => {
+    app.delete("/wishlist/:email/:propertyId",verifyToken, async (req, res) => {
       const { email, propertyId } = req.params;
       try {
         const deletedItem = await wishlistCollection.deleteOne({
@@ -487,7 +490,7 @@ async function run() {
   
     // offer collection api
 
-    app.post('/make-offer', async(req, res)=>{
+    app.post('/make-offer',verifyToken, async(req, res)=>{
         const offer = req.body;
     
         // Insert the offer into the database
@@ -496,7 +499,7 @@ async function run() {
     
      
     })
-     app.get('/offer/:id', async(req,res)=>{
+     app.get('/offer/:id', verifyToken, async(req,res)=>{
       const id = req.params.id;
       const query = {_id: new ObjectId(id)}
      
@@ -510,14 +513,14 @@ async function run() {
     res.send(result)
   })
 
-  app.get('/req-property/:email', async(req, res)=>{
+  app.get('/req-property/:email',verifyToken,verifyAgent, async(req, res)=>{
     const email = req.params.email;
     const query = {"property.agent.email" : email}
     const result = await offerCollection.find(query).toArray();
     res.send(result)
   })
 
-  app.patch("/req-property/:offerId", async (req, res) =>{
+  app.patch("/req-property/:offerId",verifyToken,verifyAgent, async (req, res) =>{
     const offerId = req.params.offerId;
       const propertyId = req.body.propertyId;
 
@@ -532,7 +535,7 @@ async function run() {
 
   })
 
-  app.patch('/rej-property/:offerId', async(req, res)=>{
+  app.patch('/rej-property/:offerId',verifyToken,verifyAgent, async(req, res)=>{
     const offerId = req.params.offerId;
     const filter = {_id : new ObjectId(offerId)}
     const updateDoc = {$set : {status : "rejected"}}
@@ -542,7 +545,7 @@ async function run() {
 
 
   // payment intent
-  app.post('/create-payment-intent', async(req,res)=>{
+  app.post('/create-payment-intent',verifyToken, async(req,res)=>{
     const {price} = req.body;
     const amount = parseInt(price * 100)
     const paymentIntent = await stripe.paymentIntents.create({
@@ -555,14 +558,14 @@ async function run() {
     })
   })
 
-  app.get('/payments/:email', async(req,res)=>{
+  app.get('/payments/:email',verifyToken, async(req,res)=>{
     const email = req.params.email;
     const query = {email : email}
     const result  = await paymentCollection.find(query).toArray();
     res.send(result)
   })
 
-  app.post('/payments', async(req,res)=>{
+  app.post('/payments',verifyToken, async(req,res)=>{
     const payment = req.body;
     const { offerIds, transactionId } = payment; // Get offerIds and transactionId from request body
 

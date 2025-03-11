@@ -4,9 +4,11 @@ import React from 'react';
 import toast from 'react-hot-toast';
 // react icons
 import {MdDelete} from "react-icons/md";
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 
 const ManageReviews = () => {
+  const axiosSecure = useAxiosSecure()
 
   const {
     data: reviews,
@@ -15,7 +17,7 @@ const ManageReviews = () => {
   } = useQuery({
     queryKey: ["reviews"],
     queryFn: async () => {
-      const { data } = await axios(
+      const { data } = await axiosSecure(
         `${import.meta.env.VITE_URL}/reviews`
       );
       return data;
@@ -25,7 +27,7 @@ const ManageReviews = () => {
   // Delete Review
   const deleteMutation = useMutation({
     mutationFn: async (id) => {
-      await axios.delete(`${import.meta.env.VITE_URL}/reviews/${id}`);
+      await axiosSecure.delete(`${import.meta.env.VITE_URL}/reviews/${id}`);
     },
     onSuccess: () => {
       refetch(); 

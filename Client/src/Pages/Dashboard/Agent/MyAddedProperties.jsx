@@ -4,8 +4,11 @@ import { AuthContext } from '../../../AuthProvider/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import LoadingSpinner from '../../../Components/LoadingSpinner';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const MyAddedProperties = () => {
+  const axiosSecure = useAxiosSecure()
+
 const navigate = useNavigate()
     const { user } = useContext(AuthContext);
   const [properties, setProperties] = useState([]);
@@ -17,7 +20,7 @@ const navigate = useNavigate()
 
     const fetchProperties = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_URL}/properties/${user.email}`);
+        const res = await axiosSecure.get(`${import.meta.env.VITE_URL}/properties/${user.email}`);
         setProperties(res.data);
       } catch (err) {
         setError("Error fetching properties");
@@ -32,7 +35,7 @@ const navigate = useNavigate()
   // delete functionality
   const handleDelete = async (id) => {
     try {
-      const { data } = await axios.delete(`${import.meta.env.VITE_URL}/property/${id}`);
+      const { data } = await axiosSecure.delete(`${import.meta.env.VITE_URL}/property/${id}`);
       toast.success("Your Property Deleted Successfully!!!");
       setProperties((prevProperties) => prevProperties.filter((property) => property._id !== id));
     } catch (err) {

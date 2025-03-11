@@ -2,8 +2,11 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const RequestedProperties = () => {
+  const axiosSecure = useAxiosSecure()
+
   const { user } = useContext(AuthContext);
   const [offer, setOffer] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,7 +19,7 @@ const RequestedProperties = () => {
     queryKey: ["requestedProperties", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
-      const response = await axios.get(
+      const response = await axiosSecure.get(
         `${import.meta.env.VITE_URL}/req-property/${user?.email}`
       );
       return response.data;
@@ -26,7 +29,7 @@ const RequestedProperties = () => {
 
   const updateStatus = async (offerId, propertyId) => {
     try {
-      const { data } = await axios.patch(
+      const { data } = await axiosSecure.patch(
         `${import.meta.env.VITE_URL}/req-property/${offerId}`,
         { propertyId }
       );
@@ -39,7 +42,7 @@ const RequestedProperties = () => {
 
   const rejectStatus = async(offerId)=>{
     try {
-      const { data } = await axios.patch(
+      const { data } = await axiosSecure.patch(
         `${import.meta.env.VITE_URL}/rej-property/${offerId}`
       );
       setOffer(data);

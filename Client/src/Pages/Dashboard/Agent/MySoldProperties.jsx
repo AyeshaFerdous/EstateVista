@@ -2,8 +2,11 @@ import React, { useContext } from "react";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const MySoldProperties = () => {
+  const axiosSecure = useAxiosSecure()
+
   const { user } = useContext(AuthContext);
   const {
     data: soldProperties,
@@ -12,7 +15,7 @@ const MySoldProperties = () => {
   } = useQuery({
     queryKey: ["soldProperties", user?.email],
     queryFn: async () => {
-      const { data } = await axios(
+      const { data } = await axiosSecure(
         `${import.meta.env.VITE_URL}/sold-properties/${user?.email}`
       );
       return data;

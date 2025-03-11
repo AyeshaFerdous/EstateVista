@@ -2,8 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { AiFillCheckCircle } from "react-icons/ai";
 import { AiFillCloseCircle } from "react-icons/ai";
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 const ManageProperties = () => {
-    
+  const axiosSecure = useAxiosSecure()
+
 
     const { data: properties = [], isLoading, error, refetch } = useQuery({
         queryKey: ["properties"],
@@ -16,7 +18,7 @@ const ManageProperties = () => {
 
      const updateVerify = async (propertyId) => {
         try {
-          const { data } = await axios.patch(
+          const { data } = await axiosSecure.patch(
             `${import.meta.env.VITE_URL}/verify-property/${propertyId}`
           );
           refetch()
@@ -28,7 +30,7 @@ const ManageProperties = () => {
 
       const rejectVerify = async(propertyId)=>{
         try {
-          const { data } = await axios.patch(
+          const { data } = await axiosSecure.patch(
             `${import.meta.env.VITE_URL}/reject-property/${propertyId}`
           );
         
