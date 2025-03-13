@@ -6,13 +6,14 @@ import { IoMdHeart } from "react-icons/io";
 import ReviewModal from "../Components/Modal/ReviewModal";
 import { AuthContext } from "../AuthProvider/AuthProvider";
 import toast from "react-hot-toast";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const ViewDetails = () => {
   const { id } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useContext(AuthContext);
 
-  
+  const axiosSecure  = useAxiosSecure()
 
  
   // Fetching the property details
@@ -23,7 +24,7 @@ const ViewDetails = () => {
   } = useQuery({
     queryKey: ["property", id],
     queryFn: async () => {
-      const { data } = await axios(
+      const { data } = await axiosSecure(
         `${import.meta.env.VITE_URL}/property/${id}`
       );
       return data;
@@ -39,7 +40,7 @@ const ViewDetails = () => {
   } = useQuery({
     queryKey: ["reviews", id],
     queryFn: async () => {
-      const { data } = await axios(`${import.meta.env.VITE_URL}/reviews/${id}`);
+      const { data } = await axiosSecure(`${import.meta.env.VITE_URL}/reviews/${id}`);
       return data;
     },
   });
@@ -51,7 +52,7 @@ const ViewDetails = () => {
   // post property to the wishlist
   const { mutate: addToWishlist, isLoading: isWishlistLoading } = useMutation({
     mutationFn: async () => {
-      return await axios.post(`${import.meta.env.VITE_URL}/wishlist`, {
+      return await axiosSecure.post(`${import.meta.env.VITE_URL}/wishlist`, {
         name: user?.displayName,
         email: user?.email,
         propertyId: id,
