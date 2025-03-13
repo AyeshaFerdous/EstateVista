@@ -59,7 +59,7 @@ const Register = () => {
         <h2 className="text-3xl font-bold text-white text-center mb-6">Create an Account</h2>
         <p className="text-center text-gray-200 mb-6">Register to get started</p>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
           <div>
             <label className="block text-gray-200 font-medium mb-1">Email</label>
             <input
