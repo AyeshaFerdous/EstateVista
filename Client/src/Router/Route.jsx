@@ -3,7 +3,6 @@ import {
   } from "react-router-dom";
 import Mainlayout from "../Layout/Mainlayout";
 import Home from "../Pages/Home/Home";
-import LoginRegister from "../Pages/Home/Authentication/LoginRegister";
 import Dashboard from "../Layout/Dashboard";
 import AllProperties from "../Pages/AllProperties";
 import ViewDetails from "../Pages/ViewDetails";
@@ -30,6 +29,8 @@ import AdminRoute from "./AdminRoute";
 import ErrorPage from "../Pages/Errorpage";
 import Contact from "../Pages/Contact";
 import AboutUs from "../Pages/Home/AboutUs";
+import Login from "../Pages/Home/Authentication/Login";
+import Register from "../Pages/Home/Authentication/Register";
 
 
 
@@ -61,8 +62,12 @@ import AboutUs from "../Pages/Home/AboutUs";
           },
         {
             path : '/login',
-            element : <LoginRegister/>
-        }
+            element : <Login/>
+        },
+        {
+          path : '/register',
+          element : <Register/>
+      }
       ]
     },
     {
