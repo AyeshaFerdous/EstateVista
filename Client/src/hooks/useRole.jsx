@@ -13,7 +13,6 @@ const useRole = () => {
     enabled: !!user?.email,
     queryFn: async () => {
       const { data } = await axiosSecure.get(`${import.meta.env.VITE_URL}/user/${user?.email}`);
-      console.log(data)
       return data?.role;
     },
   });
