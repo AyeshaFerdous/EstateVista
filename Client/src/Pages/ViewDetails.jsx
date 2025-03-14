@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IoMdHeart } from "react-icons/io";

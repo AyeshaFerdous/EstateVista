@@ -1,13 +1,13 @@
 import React, { useContext, useState } from 'react';
-import axios from 'axios';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const ReviewModal = ({ isOpen, propertyId, closeModal,refetch, propertyTitle }) => {
   const{user} = useContext(AuthContext)
   const [rating, setRating] = useState(1);
   const [comment, setComment] = useState('');
   const [error, setError] = useState('');
-
+  const axiosSecure = useAxiosSecure();
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -18,7 +18,7 @@ const ReviewModal = ({ isOpen, propertyId, closeModal,refetch, propertyTitle }) 
     }
 
     try {
-      await axios.post(`${import.meta.env.VITE_URL}/reviews/${propertyId}`, {
+      await axiosSecure.post(`${import.meta.env.VITE_URL}/reviews/${propertyId}`, {
         propertyTitle,
         rating,
         comment,

@@ -19,7 +19,7 @@ const corsOptions = {
     'https://estatevista-7e230.web.app',
   ],
   credentials: true,
-  optionSuccessStatus: 200,
+  
 }
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -388,7 +388,7 @@ async function run() {
     });
 
     // delete reviews
-    app.delete("/reviews/:reviewId",verifyToken,verifyAdmin, async (req, res) => {
+    app.delete("/reviews/:reviewId",verifyToken, async (req, res) => {
       const reviewId = req.params.reviewId;
       const query = { _id: new ObjectId(reviewId) };
       const result = await reviewCollection.deleteOne(query);
