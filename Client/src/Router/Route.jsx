@@ -130,7 +130,7 @@ import Register from "../Pages/Home/Authentication/Register";
          {
            path: '/dashboard/updateProperty/:id',
            element: <AgentRoute><UpdateProperties></UpdateProperties></AgentRoute>,
-           loader : ({params})=> fetch(`http://localhost:5000/property/${params.id}`)
+           loader : ({params})=> fetch(`https://estatevista-ebon.vercel.app/property/${params.id}`)
          },
          {
           path: '/dashboard/wishlist',
